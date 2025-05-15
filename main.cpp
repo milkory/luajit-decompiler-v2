@@ -62,7 +62,7 @@ static bool decompile_files_recursively(const Directory& directory) {
 		outputFile = outputFile.substr(0, outputFile.find_last_of("."));
 		outputFile += ".lua";
 
-		Bytecode bytecode(arguments.inputPath + directory.path + directory.files[i]);
+		Bytecode bytecode(std::filesystem::path(arguments.inputPath) / directory.path / directory.files[i]);
 		Ast ast(bytecode, arguments.ignoreDebugInfo, arguments.minimizeDiffs);
 		Lua lua(bytecode, ast, arguments.outputPath + directory.path + outputFile, arguments.forceOverwrite, arguments.minimizeDiffs, arguments.unrestrictedAscii);
 
@@ -135,6 +135,7 @@ static char* parse_arguments(const int& argc, char** const& argv) {
 					continue;
 				} else if (argument == "minimize_diffs") {
 					arguments.minimizeDiffs = true;
+					continue;
 				} else if (argument == "output") {
 					if (i <= argc - 2) {
 						i++;
